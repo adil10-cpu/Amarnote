@@ -54,16 +54,13 @@ const GeminiChat: React.FC = () => {
                         onClick={() => setIsOpen(true)}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        className="w-20 h-20 rounded-full flex flex-col items-center justify-center text-white shadow-[0_20px_50px_rgba(5,150,105,0.4)] bg-gradient-to-tr from-emerald-600 to-green-400 border-2 border-white/30 cursor-pointer"
+                        className="w-18 h-18 rounded-2xl flex flex-col items-center justify-center text-white shadow-[0_20px_50px_rgba(5,150,105,0.4)] bg-gradient-to-tr from-emerald-600 to-green-500 border-2 border-white/20 cursor-pointer"
                     >
-                        <div className="bg-white/20 p-2.5 rounded-full mb-1">
-                            <Bot size={32} />
-                        </div>
-                        <span className="bg-primary text-white text-[8px] font-black px-2 py-0.5 rounded-full shadow-lg border border-white/10 uppercase tracking-tighter">
-                             AI ASSISTANT
-                        </span>
+                        <MessageSquare size={36} fill="white" fillOpacity={0.2} />
+                        <span className="text-[10px] font-black mt-1 uppercase tracking-widest">AI CHAT</span>
                     </motion.button>
                 ) : (
+
                     <motion.div 
                         layoutId="chat-button"
                         initial={{ opacity: 0, y: 50, scale: 0.8, filter: "blur(10px)" }}
