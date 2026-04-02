@@ -1,11 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, X, MessageSquare, Loader, MessageCircleCode } from 'lucide-react';
+import { Send, Bot, X, MessageSquare, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '../services/api';
+
+interface Message {
+    role: 'user' | 'bot';
+    text: string;
+}
 
 const GeminiChat: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<{ role: 'user' | 'bot', text: string }[]>([
-        { role: 'bot', text: 'Hello! I am your AI Study Assistant. How can I help you with your DIU study notes today?' }
+        { role: 'bot', text: 'Hello! I am your Gemini-powered AI Assistant. Ask me anything about your DIU notes!' }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
@@ -28,22 +34,26 @@ const GeminiChat: React.FC = () => {
         setInput('');
         setIsTyping(true);
 
-        // Standard AI Response Simulation
-        setTimeout(() => {
-            let botResponse = "That's a helpful question! I suggest organizing your board notes by Subject and Topic using the Amar Note capture tool.";
-            
-            if (userMsg.toLowerCase().includes('subject')) {
-                botResponse = "Organizing by Subject ensures you can quickly find study materials during midterm and final exams at DIU!";
-            } else if (userMsg.toLowerCase().includes('exam') || userMsg.toLowerCase().includes('midterm')) {
-                botResponse = "For exams, I suggest exporting your important board notes as PDF and reviewing them regularly. Preparation makes a perfect student!";
-            } else if (userMsg.toLowerCase().includes('search') || userMsg.toLowerCase().includes('find')) {
-                botResponse = "You can use our 'Search Notes' tool on the dashboard to immediately find any note by topic or teacher name.";
-            }
+        try {
+            const response = await api.post('/ai/chat', { 
+                message: userMsg,
+                history: messages.map((m: any) => ({
+                    role: m.role === 'bot' ? 'model' : 'user',
+                    parts: [{ text: m.text }]
+                }))
+            });
 
-            setMessages(prev => [...prev, { role: 'bot', text: botResponse }]);
+            const botText = response.data.text;
+            setMessages(prev => [...prev, { role: 'bot', text: botText }]);
+        } catch (error) {
+            console.error("AI Assistant Error:", error);
+            setMessages(prev => [...prev, { role: 'bot', text: "I'm sorry, I encountered an error connecting to the AI brain. Please check the server logs." }]);
+        } finally {
             setIsTyping(false);
-        }, 1500);
+        }
+
     };
+
 
     return (
         <div className="fixed bottom-10 right-8 z-[9999]">
