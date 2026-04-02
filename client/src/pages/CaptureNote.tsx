@@ -18,6 +18,7 @@ const CaptureNote: React.FC = () => {
     const [isSaving, setIsSaving] = useState(false);
     
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const cameraInputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,21 +153,32 @@ const CaptureNote: React.FC = () => {
                         
                         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
                             <button 
-                                onClick={() => fileInputRef.current?.click()}
-                                className="btn-secondary py-4 px-8 text-lg rounded-2xl flex items-center justify-center gap-2"
+                                onClick={() => cameraInputRef.current?.click()}
+                                className="btn-secondary py-4 px-8 text-lg rounded-2xl flex items-center justify-center gap-2 shadow-lg"
                             >
                                 <Camera size={24} /> Take Photo
                             </button>
                             <button 
                                 onClick={() => fileInputRef.current?.click()}
-                                className="btn-primary py-4 px-8 text-lg rounded-2xl flex items-center justify-center gap-2"
+                                className="btn-primary py-4 px-8 text-lg rounded-2xl flex items-center justify-center gap-2 shadow-lg"
                             >
                                 <Upload size={24} /> Upload Note
                             </button>
+                            
+                            {/* Hidden Camera Input (Mobile Direct) */}
                             <input 
                                 type="file" 
                                 accept="image/*" 
                                 capture="environment" 
+                                ref={cameraInputRef} 
+                                onChange={handleImageUpload} 
+                                className="hidden" 
+                            />
+
+                            {/* Hidden Gallery Input (Mobile Photos Library) */}
+                            <input 
+                                type="file" 
+                                accept="image/*" 
                                 ref={fileInputRef} 
                                 onChange={handleImageUpload} 
                                 className="hidden" 
