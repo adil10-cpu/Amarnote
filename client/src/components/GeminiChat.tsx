@@ -46,24 +46,26 @@ const GeminiChat: React.FC = () => {
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-50">
-            {/* Direct Link to Google Gemini App */}
+        <div className="fixed bottom-8 right-8 z-[9999]">
+            {/* Direct Link to Google Gemini App - Optimized for Mobile Touch */}
             <motion.a
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
                 href="https://gemini.google.com/app"
-                target="_blank"
+                target="_blank" 
                 rel="noopener noreferrer"
-                className="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-2xl transition-all duration-300 bg-gradient-to-tr from-primary to-blue-600 border-2 border-white/20 relative"
+                onClick={() => console.log('Opening Google Gemini')}
+                className="w-18 h-18 lg:w-20 lg:h-20 rounded-full flex flex-col items-center justify-center text-white shadow-[0_20px_50px_rgba(30,58,138,0.3)] transition-all duration-300 bg-gradient-to-tr from-blue-700 via-primary to-blue-500 border-2 border-white/30 relative active:scale-95 touch-manipulation cursor-pointer"
             >
-                <div className="bg-white/10 p-2 rounded-full">
-                    <Sparkles size={32} className="text-yellow-300 animate-pulse" />
+                <div className="bg-white/20 p-2 rounded-full mb-1">
+                    <Sparkles size={36} className="text-yellow-300 animate-pulse" />
                 </div>
-                <span className="absolute -top-2 -right-2 bg-secondary text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg border border-white/20">
+                <span className="bg-secondary text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg border border-white/20 absolute -top-1 -right-1">
                      GEMINI
                 </span>
             </motion.a>
         </div>
+
     );
 };
 
