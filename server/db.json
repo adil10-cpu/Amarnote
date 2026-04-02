@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "_id": "1775101687205",
+      "name": "Test Student",
+      "email": "test@diu.edu.bd",
+      "password": "$2b$10$m2Pns8/Aj5ND2mrHEDUDLuQaKtboSGq.tOm45QWObiBjE1D0.UYSG",
+      "createdAt": "2026-04-02T03:48:07.205Z"
+    }
+  ],
+  "notes": [
+    {
+      "_id": "1775105572650",
+      "user": "1775101687205",
+      "subject": "Test",
+      "topic": "Verify",
+      "teacher": "AI",
+      "date": "2026-04-02",
+      "extractedText": "Success",
+      "createdAt": "2026-04-02T04:52:52.650Z"
+    },
+    {
+      "_id": "1775105639332",
+      "user": "1775101687205",
+      "subject": "zz",
+      "topic": "zz",
+      "teacher": "zz",
+      "date": "2026-04-02",
+      "extractedText": "El SAIF ADIL KHAN\nJeli wou venice\n5\nwe WORK EXPERIENCE\nhonsies. Ver Scania Crit 153) arma\n=) pr ER\n",
+      "createdAt": "2026-04-02T04:53:59.332Z"
+    },
+    {
+      "_id": "1775106480530",
+      "user": "guest",
+      "subject": "zzzz",
+      "topic": "zz",
+      "teacher": "zz",
+      "date": "2026-04-02",
+      "extractedText": "El SAIF ADIL KHAN\nJeli wou venice\n5\nwe WORK EXPERIENCE\nhonsies. Ver Scania Crit 153) arma\n=) pr ER\n",
+      "imageUrl": "/uploads/note_1775106480527_ejh8ts.png",
+      "createdAt": "2026-04-02T05:08:00.530Z"
+    }
+  ]
+}

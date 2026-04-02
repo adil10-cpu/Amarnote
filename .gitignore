@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+uploads/*.png
+uploads/*.jpg
+*.local
+.parcel-cache
+.vscode
+.DS_Store
