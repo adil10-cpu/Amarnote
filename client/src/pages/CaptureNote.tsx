@@ -15,6 +15,7 @@ const CaptureNote: React.FC = () => {
     const [teacher, setTeacher] = useState('');
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [isEditing, setIsEditing] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     
     const fileInputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
@@ -58,29 +59,69 @@ const CaptureNote: React.FC = () => {
         }
     };
 
+    const compressImage = (base64Str: string): Promise<string> => {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.src = base64Str;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 1200; // Optimal for board photos
+                const MAX_HEIGHT = 1200;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx?.drawImage(img, 0, 0, width, height);
+                // Compress to 70% quality JPEG
+                resolve(canvas.toDataURL('image/jpeg', 0.7));
+            };
+        });
+    };
+
     const handleSaveNote = async () => {
-        if (!subject || !topic || !extractedText) {
-            alert('Please fill at least Subject, Topic and ensure text is extracted.');
+        if (!subject || !topic || !extractedText || !image) {
+            alert('Please ensure Subject, Topic and Image are all present.');
             return;
         }
 
+        setIsSaving(true);
         try {
+            console.log("Compressing image for mobile-friendly upload...");
+            const compressedImage = await compressImage(image);
+            
             await api.post('/notes', {
                 subject,
                 topic,
                 teacher,
                 date,
                 extractedText,
-                image // Send the base64 image
+                image: compressedImage
             });
-            alert('Note saved successfully!');
+            
+            alert('Note saved successfully to your DIU Library!');
             navigate('/notes');
-        } catch (error) {
-
+        } catch (error: any) {
             console.error('Error saving note:', error);
-            alert('Failed to save note.');
+            const errorMsg = error.response?.data?.message || 'Failed to save note. Please check your internet connection.';
+            alert(errorMsg);
+        } finally {
+            setIsSaving(false);
         }
     };
+
 
     return (
         <div className="min-h-screen bg-slate-50 text-slate-800 pb-20">
@@ -228,14 +269,24 @@ const CaptureNote: React.FC = () => {
                                     />
                                 </div>
 
-                                <div className="flex gap-4">
-                                     <button 
-                                        onClick={handleSaveNote}
-                                        className="flex-1 btn-secondary py-4 text-xl font-bold uppercase rounded-2xl"
-                                    >
-                                        <Check size={28} /> SAVE DIGITAL NOTE
-                                    </button>
-                                </div>
+                                 <div className="flex gap-4">
+                                      <button 
+                                         onClick={handleSaveNote}
+                                         disabled={isSaving}
+                                         className={`flex-1 btn-secondary py-4 text-xl font-bold uppercase rounded-2xl flex items-center justify-center gap-2 ${isSaving ? 'opacity-70' : ''}`}
+                                     >
+                                         {isSaving ? (
+                                             <>
+                                                 <Loader className="animate-spin" size={28} /> SAVING NOTE...
+                                             </>
+                                         ) : (
+                                             <>
+                                                 <Check size={28} /> SAVE DIGITAL NOTE
+                                             </>
+                                         )}
+                                     </button>
+                                 </div>
+
                             </motion.div>
                         )}
                         </AnimatePresence>
