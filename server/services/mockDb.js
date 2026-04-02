@@ -100,11 +100,40 @@ const searchUserNotes = (userId, query) => {
     ).sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
 };
 
+const deleteNote = (noteId, userId) => {
+    const db = readDb();
+    const noteIndex = db.notes.findIndex(n => n._id === noteId && n.user === userId);
+    
+    if (noteIndex === -1) return false;
+
+    const note = db.notes[noteIndex];
+    
+    // Delete physical image file if exists
+    if (note.imageUrl) {
+        try {
+            const fileName = note.imageUrl.split('/').pop();
+            const filePath = path.join(__dirname, '../uploads', fileName);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+                console.log(`Deleted image file: ${filePath}`);
+            }
+        } catch (err) {
+            console.error('Failed to delete physical image file:', err);
+        }
+    }
+
+    db.notes.splice(noteIndex, 1);
+    writeDb(db);
+    return true;
+};
+
 module.exports = {
     createUser,
     findUserByEmail,
     matchUserPassword,
     createNote,
     getUserNotes,
-    searchUserNotes
+    searchUserNotes,
+    deleteNote
 };
+

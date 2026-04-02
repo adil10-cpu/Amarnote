@@ -102,16 +102,20 @@ const SearchNotes: React.FC = () => {
                     ) : (
                         <AnimatePresence>
                             {results.map((note, index) => (
-                                <motion.div
+                                 <motion.div
                                     key={note._id}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.05 }}
                                 >
-                                    <NoteCard note={note} />
+                                    <NoteCard 
+                                        note={note} 
+                                        onDelete={() => setResults(results.filter(r => r._id !== note._id))}
+                                    />
                                 </motion.div>
                             ))}
                         </AnimatePresence>
+
                     )}
                     
                     {!isSearching && !loading && (

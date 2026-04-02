@@ -47,4 +47,19 @@ router.get('/search', protect, async (req, res) => {
     }
 });
 
+router.delete('/:id', protect, async (req, res) => {
+    try {
+        const deleted = mockDb.deleteNote(req.params.id, req.user._id);
+        if (deleted) {
+             res.json({ message: 'Note deleted successfully' });
+        } else {
+             res.status(404).json({ message: 'Note not found or unauthorized' });
+        }
+    } catch (error) {
+        console.error('Delete Error:', error);
+        res.status(500).json({ message: 'Server error during deletion' });
+    }
+});
+
 module.exports = router;
+
