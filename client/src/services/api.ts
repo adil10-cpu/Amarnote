@@ -1,7 +1,12 @@
 import axios from 'axios';
 
-export const BASE_URL = 'http://localhost:5000';
+// Dynamic Base URL for Vercel/Localhost
+export const BASE_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost')
+  ? window.location.origin
+  : 'http://localhost:5000';
 const API_URL = `${BASE_URL}/api`;
+
+
 
 
 const api = axios.create({

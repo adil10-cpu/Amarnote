@@ -51,9 +51,17 @@ const Dashboard: React.FC = () => {
                         href="https://github.com/adil10-cpu/Amar-note" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="hidden md:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                        className="hidden lg:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold transition-all"
                     >
-                        <Code size={18} /> GitHub Repo
+                        <Code size={18} /> Repo V1
+                    </a>
+                    <a 
+                        href="https://github.com/adil10-cpu/Aman-note-Diu" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="hidden lg:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold transition-all border border-primary/10"
+                    >
+                        <Code size={18} /> Repo V2
                     </a>
 
                     <a 
@@ -66,6 +74,7 @@ const Dashboard: React.FC = () => {
                          <ExternalLink size={14} />
                     </a>
                 </div>
+
             </header>
 
 
