@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, X, MessageSquare, Loader, Sparkles, MessageCircleCode } from 'lucide-react';
+import { Send, Bot, X, MessageSquare, Loader, MessageCircleCode } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const GeminiChat: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<{ role: 'user' | 'bot', text: string }[]>([
-        { role: 'bot', text: 'Hello! I am your AI Study Assistant. How can I help you with your DIU notes?' }
+        { role: 'bot', text: 'Hello! I am your AI Study Assistant. How can I help you with your DIU study notes today?' }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
@@ -28,14 +28,16 @@ const GeminiChat: React.FC = () => {
         setInput('');
         setIsTyping(true);
 
-        // Simulation for local AI chat
+        // Standard AI Response Simulation
         setTimeout(() => {
-            let botResponse = "That's a great question! I can help you organize and review your notes. You can also use the official Google Gemini for deeper analysis.";
+            let botResponse = "That's a helpful question! I suggest organizing your board notes by Subject and Topic using the Amar Note capture tool.";
             
             if (userMsg.toLowerCase().includes('subject')) {
-                botResponse = "Organizing by Subject is the best way at DIU! It ensures you find what you need during final exams.";
-            } else if (userMsg.toLowerCase().includes('help') || userMsg.toLowerCase().includes('gemini')) {
-                botResponse = "If you need advanced AI help, click the 'Open Advanced AI' button below to talk to Gemini directly!";
+                botResponse = "Organizing by Subject ensures you can quickly find study materials during midterm and final exams at DIU!";
+            } else if (userMsg.toLowerCase().includes('exam') || userMsg.toLowerCase().includes('midterm')) {
+                botResponse = "For exams, I suggest exporting your important board notes as PDF and reviewing them regularly. Preparation makes a perfect student!";
+            } else if (userMsg.toLowerCase().includes('search') || userMsg.toLowerCase().includes('find')) {
+                botResponse = "You can use our 'Search Notes' tool on the dashboard to immediately find any note by topic or teacher name.";
             }
 
             setMessages(prev => [...prev, { role: 'bot', text: botResponse }]);
@@ -43,77 +45,72 @@ const GeminiChat: React.FC = () => {
         }, 1500);
     };
 
-    const openGemini = () => {
-        window.open("https://gemini.google.com/app", "_blank", "noopener,noreferrer");
-    };
-
     return (
-        <>
-            {/* The Gemini Link Button (Small & Discrete) */}
-            <div className="fixed bottom-28 right-8 z-[9999]">
-                <button
-                    onClick={openGemini}
-                    className="w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg bg-blue-500 border border-white/20 hover:scale-110 active:scale-95 transition-all"
-                    title="Open Google Gemini"
-                >
-                    <Sparkles size={20} className="text-yellow-300" />
-                </button>
-            </div>
-
-            {/* The AI Chat Box Button (New Logo: MessageCircleCode) */}
-            <div className="fixed bottom-10 right-8 z-[9999]">
+        <div className="fixed bottom-10 right-8 z-[9999]">
+            <AnimatePresence>
                 {!isOpen ? (
-                    <button
+                    <motion.button
+                        layoutId="chat-button"
                         onClick={() => setIsOpen(true)}
-                        className="w-20 h-20 rounded-full flex flex-col items-center justify-center text-white shadow-[0_20px_50px_rgba(5,150,105,0.4)] bg-gradient-to-tr from-emerald-600 to-green-400 border-2 border-white/30 transform transition-all active:scale-90 hover:scale-110 cursor-pointer"
-                        aria-label="Open AI Chat"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="w-20 h-20 rounded-full flex flex-col items-center justify-center text-white shadow-[0_20px_50px_rgba(5,150,105,0.4)] bg-gradient-to-tr from-emerald-600 to-green-400 border-2 border-white/30 cursor-pointer"
                     >
                         <div className="bg-white/20 p-2.5 rounded-full mb-1">
                             <Bot size={32} />
                         </div>
-                        <span className="bg-primary text-white text-[8px] font-black px-2 py-0.5 rounded-full shadow-lg border border-white/10">
-                             AI CHAT
+                        <span className="bg-primary text-white text-[8px] font-black px-2 py-0.5 rounded-full shadow-lg border border-white/10 uppercase tracking-tighter">
+                             AI ASSISTANT
                         </span>
-                    </button>
+                    </motion.button>
                 ) : (
                     <motion.div 
-                        initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        className="w-[350px] sm:w-[400px] h-[550px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200"
+                        layoutId="chat-button"
+                        initial={{ opacity: 0, y: 50, scale: 0.8, filter: "blur(10px)" }}
+                        animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, y: 50, scale: 0.8, filter: "blur(10px)" }}
+                        className="w-[350px] sm:w-[400px] h-[550px] bg-white rounded-3xl shadow-[0_25px_70px_rgba(30,58,138,0.2)] flex flex-col overflow-hidden border border-slate-200"
                     >
                         {/* Chat Header */}
-                        <div className="bg-gradient-to-r from-emerald-600 to-green-500 p-4 text-white flex justify-between items-center">
-                            <div className="flex items-center gap-2">
-                                <Bot size={24} />
+                        <div className="bg-gradient-to-r from-emerald-600 to-green-500 p-5 text-white flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                                <div className="bg-white/20 p-2 rounded-xl">
+                                    <Bot size={24} />
+                                </div>
                                 <div>
-                                    <h4 className="font-bold text-sm">DIU Study Assistant</h4>
-                                    <span className="text-[10px] opacity-80">AI Powered</span>
+                                    <h4 className="font-bold text-base leading-none">DIU Study Buddy</h4>
+                                    <span className="text-[10px] opacity-80 uppercase tracking-widest font-black">Online Assistant</span>
                                 </div>
                             </div>
-                            <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1 rounded-lg">
+                            <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-2 rounded-xl transition-colors">
                                 <X size={20} />
                             </button>
                         </div>
 
                         {/* Messages Area */}
-                        <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-slate-50">
+                        <div className="flex-grow overflow-y-auto p-5 space-y-5 bg-slate-50/50">
                             {messages.map((msg, idx) => (
-                                <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                    <div className={`max-w-[80%] p-3 rounded-2xl text-sm shadow-sm ${
+                                <motion.div 
+                                    key={idx} 
+                                    initial={{ opacity: 0, x: msg.role === 'user' ? 20 : -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                                >
+                                    <div className={`max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${
                                         msg.role === 'user' 
-                                        ? 'bg-emerald-600 text-white rounded-tr-none' 
+                                        ? 'bg-emerald-600 text-white rounded-tr-none font-medium' 
                                         : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none'
                                     }`}>
                                         {msg.text}
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
                             {isTyping && (
                                 <div className="flex justify-start">
-                                    <div className="bg-white p-3 rounded-2xl shadow-sm rounded-tl-none flex gap-1">
-                                        <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce"></div>
-                                        <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce delay-75"></div>
-                                        <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce delay-150"></div>
+                                    <div className="bg-white p-4 rounded-2xl shadow-sm rounded-tl-none flex gap-1.5 px-6">
+                                        <div className="w-1.5 h-1.5 bg-emerald-300 rounded-full animate-bounce"></div>
+                                        <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce delay-75"></div>
+                                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-bounce delay-150"></div>
                                     </div>
                                 </div>
                             )}
@@ -121,33 +118,28 @@ const GeminiChat: React.FC = () => {
                         </div>
 
                         {/* Input Area */}
-                        <div className="p-4 bg-white border-t border-slate-100">
-                            <form onSubmit={handleSend} className="flex gap-2 mb-2">
+                        <div className="p-5 bg-white border-t border-slate-100 shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
+                            <form onSubmit={handleSend} className="flex gap-3">
                                 <input
                                     type="text"
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
-                                    placeholder="Ask anything note related..."
-                                    className="flex-grow bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-emerald-500"
+                                    placeholder="Type your study question..."
+                                    className="flex-grow bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-3 text-sm focus:outline-none focus:border-emerald-500/50 focus:bg-white transition-all"
                                 />
                                 <button 
                                     type="submit" 
-                                    className="bg-emerald-600 text-white p-2 rounded-xl hover:bg-emerald-700 transition-colors"
+                                    disabled={!input.trim()}
+                                    className="bg-emerald-600 text-white p-3.5 rounded-2xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 disabled:opacity-50 disabled:shadow-none"
                                 >
-                                    <Send size={18} />
+                                    <Send size={20} />
                                 </button>
                             </form>
-                            <button 
-                                onClick={openGemini}
-                                className="w-full bg-blue-50 text-blue-600 border border-blue-100 rounded-xl py-2 text-xs font-bold flex items-center justify-center gap-2 hover:bg-blue-100 transition-all uppercase tracking-widest"
-                            >
-                                <Sparkles size={14} /> Open Advanced AI (Gemini)
-                            </button>
                         </div>
                     </motion.div>
                 )}
-            </div>
-        </>
+            </AnimatePresence>
+        </div>
     );
 };
 
